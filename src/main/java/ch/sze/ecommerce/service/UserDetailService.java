@@ -1,7 +1,6 @@
 package ch.sze.ecommerce.service;
 
 import ch.sze.ecommerce.config.UserPrincipal;
-import ch.sze.ecommerce.entity.UserEntity;
 import ch.sze.ecommerce.repository.UserEntityRepo;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,15 +18,11 @@ public class UserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        UserEntity userEntity = repo.findByUsername(username);
-
-        if (userEntity == null) {
-
-            System.out.println("User not found");
-            throw new UsernameNotFoundException("User not found");
-        }
-        System.out.println("User was found");
-        return new UserPrincipal(userEntity);
+        return repo.findByUsername(username)
+                .map(UserPrincipal::new)
+                .orElseThrow(() -> {
+                    System.out.println("User not found: " + username);
+                    return new UsernameNotFoundException("User not found with username: " + username);
+                });
     }
 }

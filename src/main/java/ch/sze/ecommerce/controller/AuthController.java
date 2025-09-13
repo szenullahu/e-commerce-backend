@@ -1,6 +1,8 @@
 package ch.sze.ecommerce.controller;
 
 import ch.sze.ecommerce.entity.UserEntity;
+import ch.sze.ecommerce.entity.dto.AuthResponseDTO;
+import ch.sze.ecommerce.entity.dto.LoginDTO;
 import ch.sze.ecommerce.service.UserEntityService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -24,7 +26,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public UserEntity login(@Valid @RequestBody UserEntity user) {
+    public AuthResponseDTO login(@Valid @RequestBody LoginDTO user) {
         return userService.login(user);
     }
 }
