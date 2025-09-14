@@ -1,4 +1,10 @@
 package ch.sze.ecommerce.repository;
 
-public interface CategoryRepo {
+import ch.sze.ecommerce.entity.Category;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.UUID;
+
+public interface CategoryRepo extends JpaRepository<Category, UUID> {
+    boolean existsByName(String name);
 }
