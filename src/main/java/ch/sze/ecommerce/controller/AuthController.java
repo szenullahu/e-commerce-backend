@@ -3,6 +3,7 @@ package ch.sze.ecommerce.controller;
 import ch.sze.ecommerce.entity.UserEntity;
 import ch.sze.ecommerce.entity.dto.AuthResponseDTO;
 import ch.sze.ecommerce.entity.dto.LoginDTO;
+import ch.sze.ecommerce.entity.dto.RegisterDTO;
 import ch.sze.ecommerce.service.UserEntityService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserEntity> register(@Valid @RequestBody UserEntity user) {
+    public ResponseEntity<UserEntity> register(@Valid @RequestBody RegisterDTO user) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.register(user));
     }
 
