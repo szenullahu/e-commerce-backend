@@ -49,6 +49,6 @@ public class CategoryController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteCategory (@PathVariable UUID id) {
         categoryService.deleteCategory(id);
-        return ResponseEntity.ok("Task Deleted");
+        return ResponseEntity.ok("Category deleted");
     }
 }
