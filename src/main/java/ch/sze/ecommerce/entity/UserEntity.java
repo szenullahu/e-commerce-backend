@@ -18,7 +18,7 @@ public class UserEntity {
     @Id
     @GeneratedValue
     @JdbcTypeCode(SqlTypes.UUID)
-    private UUID Id;
+    private UUID id;
 
     @Column(nullable = false, unique = true, updatable = false)
     private String username;
@@ -42,4 +42,8 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "basket_id")
+    private BasketEntity basket;
 }

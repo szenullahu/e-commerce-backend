@@ -1,7 +1,7 @@
 package ch.sze.ecommerce.service;
 
-import ch.sze.ecommerce.entity.Category;
-import ch.sze.ecommerce.entity.Product;
+import ch.sze.ecommerce.entity.CategoryEntity;
+import ch.sze.ecommerce.entity.ProductEntity;
 import ch.sze.ecommerce.entity.dto.ProductDTO;
 import ch.sze.ecommerce.repository.CategoryRepo;
 import ch.sze.ecommerce.repository.ProductRepo;
@@ -23,46 +23,46 @@ public class ProductService {
         this.categoryRepo = categoryRepo;
     }
 
-    public List<Product> getAllProducts() {
+    public List<ProductEntity> getAllProducts() {
         return productRepo.findAll();
     }
 
-    public Product getProduct(UUID id) {
+    public ProductEntity getProduct(UUID id) {
         return productRepo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
     }
 
-    public Product createProduct(ProductDTO dto) {
+    public ProductEntity createProduct(ProductDTO dto) {
         if (productRepo.existsByName(dto.getName())) {
             throw new IllegalArgumentException("Product name already exists");
         }
-        Category category = categoryRepo.findById(dto.getCategoryId()).orElseThrow(() -> new RuntimeException("Category not found"));
+        CategoryEntity categoryEntity = categoryRepo.findById(dto.getCategoryId()).orElseThrow(() -> new RuntimeException("Category not found"));
 
-        Product product = new Product();
-        product.setName(dto.getName());
-        product.setDescription(dto.getDescription());
-        product.setPrice(dto.getPrice());
-        product.setStock(dto.getStock());
-        product.setImage(dto.getImage());
-        product.setCategory(category);
-        return productRepo.save(product);
+        ProductEntity productEntity = new ProductEntity();
+        productEntity.setName(dto.getName());
+        productEntity.setDescription(dto.getDescription());
+        productEntity.setPrice(dto.getPrice());
+        productEntity.setStock(dto.getStock());
+        productEntity.setImage(dto.getImage());
+        productEntity.setCategoryEntity(categoryEntity);
+        return productRepo.save(productEntity);
     }
 
-    public Product updateProduct(UUID id, ProductDTO dto) {
-        Product product = productRepo.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+    public ProductEntity updateProduct(UUID id, ProductDTO dto) {
+        ProductEntity productEntity = productRepo.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
 
-        product.setName(dto.getName());
-        product.setDescription(dto.getDescription());
-        product.setImage(dto.getImage());
-        product.setPrice(dto.getPrice());
-        product.setStock(dto.getStock());
-        Category category = categoryRepo.findById(dto.getCategoryId()).orElseThrow(() -> new RuntimeException("Category not found"));
-        product.setCategory(category);
+        productEntity.setName(dto.getName());
+        productEntity.setDescription(dto.getDescription());
+        productEntity.setImage(dto.getImage());
+        productEntity.setPrice(dto.getPrice());
+        productEntity.setStock(dto.getStock());
+        CategoryEntity categoryEntity = categoryRepo.findById(dto.getCategoryId()).orElseThrow(() -> new RuntimeException("Category not found"));
+        productEntity.setCategoryEntity(categoryEntity);
 
-        return productRepo.save(product);
+        return productRepo.save(productEntity);
     }
 
     public void deleteProduct(UUID id) {
-        Category category = categoryRepo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
-        categoryRepo.delete(category);
+        CategoryEntity categoryEntity = categoryRepo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
+        categoryRepo.delete(categoryEntity);
     }
 }

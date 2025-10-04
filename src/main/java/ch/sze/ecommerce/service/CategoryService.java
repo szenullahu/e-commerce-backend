@@ -1,6 +1,6 @@
 package ch.sze.ecommerce.service;
 
-import ch.sze.ecommerce.entity.Category;
+import ch.sze.ecommerce.entity.CategoryEntity;
 import ch.sze.ecommerce.entity.dto.CategoryDTO;
 import ch.sze.ecommerce.repository.CategoryRepo;
 import org.springframework.http.HttpStatus;
@@ -19,29 +19,29 @@ public class CategoryService {
         this.categoryRepo = categoryRepo;
     }
 
-    public List<Category> getAllCategories() {
+    public List<CategoryEntity> getAllCategories() {
         return categoryRepo.findAll();
     }
 
-    public Category getCategory(UUID uuid) {
+    public CategoryEntity getCategory(UUID uuid) {
         return categoryRepo.findById(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
     }
 
-    public Category createCategory(Category category) {
-        if (categoryRepo.existsByName(category.getName())) {
+    public CategoryEntity createCategory(CategoryEntity categoryEntity) {
+        if (categoryRepo.existsByName(categoryEntity.getName())) {
             throw new IllegalArgumentException("Category name already exists");
         }
-        return categoryRepo.save(category);
+        return categoryRepo.save(categoryEntity);
     }
 
-    public Category updateCategory(UUID id, CategoryDTO dto) {
-        Category category = categoryRepo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
-        category.setName(dto.getName());
-        return categoryRepo.save(category);
+    public CategoryEntity updateCategory(UUID id, CategoryDTO dto) {
+        CategoryEntity categoryEntity = categoryRepo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
+        categoryEntity.setName(dto.getName());
+        return categoryRepo.save(categoryEntity);
     }
 
     public void deleteCategory(UUID id) {
-        Category category = categoryRepo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
-        categoryRepo.delete(category);
+        CategoryEntity categoryEntity = categoryRepo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
+        categoryRepo.delete(categoryEntity);
     }
 }
