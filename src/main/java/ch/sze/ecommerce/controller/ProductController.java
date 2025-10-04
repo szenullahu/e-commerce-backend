@@ -1,6 +1,6 @@
 package ch.sze.ecommerce.controller;
 
-import ch.sze.ecommerce.entity.Product;
+import ch.sze.ecommerce.entity.ProductEntity;
 import ch.sze.ecommerce.entity.dto.ProductDTO;
 import ch.sze.ecommerce.service.ProductService;
 import jakarta.validation.Valid;
@@ -24,24 +24,24 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
+    public ResponseEntity<List<ProductEntity>> getAllProducts() {
         return ResponseEntity.ok(productService.getAllProducts());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable UUID id) {
+    public ResponseEntity<ProductEntity> getProductById(@PathVariable UUID id) {
         return ResponseEntity.ok(productService.getProduct(id));
     }
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductDTO dto) {
+    public ResponseEntity<ProductEntity> createProduct(@Valid @RequestBody ProductDTO dto) {
         return ResponseEntity.ok(productService.createProduct(dto));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Product> updateProduct(@Valid @RequestBody ProductDTO dto, @PathVariable UUID id) {
+    public ResponseEntity<ProductEntity> updateProduct(@Valid @RequestBody ProductDTO dto, @PathVariable UUID id) {
         return ResponseEntity.ok(productService.updateProduct(id, dto));
     }
 

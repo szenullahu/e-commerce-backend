@@ -1,6 +1,6 @@
 package ch.sze.ecommerce.controller;
 
-import ch.sze.ecommerce.entity.Category;
+import ch.sze.ecommerce.entity.CategoryEntity;
 import ch.sze.ecommerce.entity.dto.CategoryDTO;
 import ch.sze.ecommerce.service.CategoryService;
 import jakarta.validation.Valid;
@@ -24,24 +24,24 @@ public class CategoryController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Category> getCategory(@PathVariable UUID id) {
+    public ResponseEntity<CategoryEntity> getCategory(@PathVariable UUID id) {
         return ResponseEntity.ok(categoryService.getCategory(id));
     }
 
     @GetMapping
-    public ResponseEntity<List<Category>> getAllCategories() {
+    public ResponseEntity<List<CategoryEntity>> getAllCategories() {
         return ResponseEntity.ok(categoryService.getAllCategories());
     }
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public Category createCategory(@RequestBody @Valid Category category) {
-        return categoryService.createCategory(category);
+    public CategoryEntity createCategory(@RequestBody @Valid CategoryEntity categoryEntity) {
+        return categoryService.createCategory(categoryEntity);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public Category updateCategory(@PathVariable UUID id, @RequestBody @Valid CategoryDTO dto){
+    public CategoryEntity updateCategory(@PathVariable UUID id, @RequestBody @Valid CategoryDTO dto){
         return categoryService.updateCategory(id, dto);
     }
 
