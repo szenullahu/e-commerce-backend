@@ -1,6 +1,7 @@
 package ch.sze.ecommerce.service;
 
 import ch.sze.ecommerce.config.UserPrincipal;
+import ch.sze.ecommerce.entity.BasketEntity;
 import ch.sze.ecommerce.entity.ProfilePicture;
 import ch.sze.ecommerce.entity.Role;
 import ch.sze.ecommerce.entity.UserEntity;
@@ -8,6 +9,7 @@ import ch.sze.ecommerce.entity.dto.AuthResponseDTO;
 import ch.sze.ecommerce.entity.dto.CreateAdminDTO;
 import ch.sze.ecommerce.entity.dto.LoginDTO;
 import ch.sze.ecommerce.entity.dto.RegisterDTO;
+import ch.sze.ecommerce.repository.BasketRepo;
 import ch.sze.ecommerce.repository.UserEntityRepo;
 import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
@@ -16,6 +18,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 @Service
 public class UserEntityService {
@@ -27,12 +31,14 @@ public class UserEntityService {
     private final AuthenticationManager manager;
 
     private final JWTService jwtService;
+    private final BasketRepo basketRepo;
 
-    public UserEntityService(UserEntityRepo userEntityRepo, PasswordEncoder encoder, AuthenticationManager manager, JWTService jwtService) {
+    public UserEntityService(UserEntityRepo userEntityRepo, PasswordEncoder encoder, AuthenticationManager manager, JWTService jwtService, BasketRepo basketRepo) {
         this.userEntityRepo = userEntityRepo;
         this.encoder = encoder;
         this.manager = manager;
         this.jwtService = jwtService;
+        this.basketRepo = basketRepo;
     }
 
     public UserEntity register(RegisterDTO dto) {
@@ -51,7 +57,15 @@ public class UserEntityService {
         user.setSurname(dto.getSurname());
         user.setProfilePicture(dto.getProfilePicture());
         user.setRole(Role.CUSTOMER);
-        return userEntityRepo.save(user);
+        UserEntity savedUser = userEntityRepo.save(user);
+
+        BasketEntity basket = new BasketEntity();
+        basket.setUser(savedUser);
+        basket.setItems(new ArrayList<>());
+        basket.setTotalPrice(0.0);
+
+        basketRepo.save(basket);
+        return savedUser;
     }
 
     public AuthResponseDTO login(@Valid LoginDTO dto) {

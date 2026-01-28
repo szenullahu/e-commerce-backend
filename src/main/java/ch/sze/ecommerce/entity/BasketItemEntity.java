@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -23,6 +24,7 @@ public class BasketItemEntity {
 
     @ManyToOne
     @JoinColumn(name = "basket_id", nullable = false)
+    @ToString.Exclude
     private BasketEntity basket;
 
     @ManyToOne
