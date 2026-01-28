@@ -31,3 +31,5 @@ Thumbs.db
 application.properties
 application.yml
 
+### Containers ###
+Dockerfile
