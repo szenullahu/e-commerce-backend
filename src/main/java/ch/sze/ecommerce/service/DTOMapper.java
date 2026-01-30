@@ -2,14 +2,56 @@ package ch.sze.ecommerce.service;
 
 import ch.sze.ecommerce.entity.BasketEntity;
 import ch.sze.ecommerce.entity.BasketItemEntity;
+import ch.sze.ecommerce.entity.OrderEntity;
+import ch.sze.ecommerce.entity.OrderItemEntity;
 import ch.sze.ecommerce.entity.dto.BasketItemResponseDTO;
 import ch.sze.ecommerce.entity.dto.BasketResponseDTO;
+import ch.sze.ecommerce.entity.dto.OrderItemResponseDTO;
+import ch.sze.ecommerce.entity.dto.OrderResponseDTO;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class DTOMapper {
+
+    public OrderResponseDTO toOrderDTO (OrderEntity order) {
+        OrderResponseDTO dto = new OrderResponseDTO();
+        dto.setOrderId(order.getId());
+        dto.setCreated(order.getCreated());
+        dto.setOrderStatus(order.getStatus());
+        dto.setTotalPrice(order.getTotalPrice());
+
+        dto.setStreet(order.getStreet());
+        dto.setCity(order.getCity());
+        dto.setZip(order.getZip());
+
+        List<OrderItemResponseDTO> itemDTOs = order.getItems().stream()
+                .map(this::toOrderItemDTO)
+                .toList();
+        dto.setItems(itemDTOs);
+        return dto;
+    }
+
+    public OrderItemResponseDTO toOrderItemDTO(OrderItemEntity item) {
+        OrderItemResponseDTO dto = new OrderItemResponseDTO();
+        dto.setItemId(item.getId());
+        dto.setQuantity(item.getQuantity());
+        dto.setPricePerUnit(item.getPricePerUnit());
+
+        dto.setTotalLinePrice(item.getPricePerUnit() * item.getQuantity());
+
+        if(item.getProduct() != null) {
+            dto.setProductId(item.getProduct().getId());
+            dto.setProductName(item.getProduct().getName());
+            dto.setProductImage(item.getProduct().getImage());
+        } else {
+            dto.setProductName("Product not available");
+        }
+
+        return dto;
+    }
 
     public BasketResponseDTO toBasketDTO(BasketEntity basket) {
         BasketResponseDTO dto = new BasketResponseDTO();
@@ -17,7 +59,7 @@ public class DTOMapper {
         dto.setTotalPrice(basket.getTotalPrice());
 
         dto.setItems(basket.getItems().stream()
-                .map(this::toItemDTO)
+                .map(this::toBasketItemDTO)
                 .collect(Collectors.toList()));
 
         dto.setTotalItemsCount(basket.getItems().stream()
@@ -27,7 +69,7 @@ public class DTOMapper {
         return dto;
     }
 
-    private BasketItemResponseDTO toItemDTO(BasketItemEntity item) {
+    private BasketItemResponseDTO toBasketItemDTO(BasketItemEntity item) {
         BasketItemResponseDTO dto = new BasketItemResponseDTO();
         dto.setItemId(item.getId());
         dto.setQuantity(item.getQuantity());
