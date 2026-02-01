@@ -1,6 +1,7 @@
 package ch.sze.ecommerce.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class UserEntity {
     private String username;
 
     @Column(nullable = false, unique = true)
+    @Email(message = "Not a valid E-Mail")
     private String email;
 
     @Column(nullable = false)

@@ -1,13 +1,7 @@
 package ch.sze.ecommerce.service;
 
-import ch.sze.ecommerce.entity.BasketEntity;
-import ch.sze.ecommerce.entity.BasketItemEntity;
-import ch.sze.ecommerce.entity.OrderEntity;
-import ch.sze.ecommerce.entity.OrderItemEntity;
-import ch.sze.ecommerce.entity.dto.BasketItemResponseDTO;
-import ch.sze.ecommerce.entity.dto.BasketResponseDTO;
-import ch.sze.ecommerce.entity.dto.OrderItemResponseDTO;
-import ch.sze.ecommerce.entity.dto.OrderResponseDTO;
+import ch.sze.ecommerce.entity.*;
+import ch.sze.ecommerce.entity.dto.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +9,19 @@ import java.util.stream.Collectors;
 
 @Service
 public class DTOMapper {
+
+    public UserResponseDTO toUserDTO (UserEntity user) {
+        UserResponseDTO dto = new UserResponseDTO();
+        dto.setId(user.getId());
+        dto.setUsername(user.getUsername());
+        dto.setFirstname(user.getFirstname());
+        dto.setSurname(user.getSurname());
+        dto.setEmail(dto.getEmail());
+        dto.setProfilePicture(dto.getProfilePicture());
+        dto.setRole(user.getRole());
+
+        return dto;
+    }
 
     public OrderResponseDTO toOrderDTO (OrderEntity order) {
         OrderResponseDTO dto = new OrderResponseDTO();

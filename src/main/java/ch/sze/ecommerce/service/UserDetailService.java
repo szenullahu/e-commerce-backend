@@ -1,7 +1,7 @@
 package ch.sze.ecommerce.service;
 
 import ch.sze.ecommerce.config.UserPrincipal;
-import ch.sze.ecommerce.repository.UserEntityRepo;
+import ch.sze.ecommerce.repository.UserRepo;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDetailService implements UserDetailsService {
 
-    private final UserEntityRepo repo;
+    private final UserRepo repo;
 
-    public UserDetailService(UserEntityRepo repo) {
+    public UserDetailService(UserRepo repo) {
         this.repo = repo;
     }
 

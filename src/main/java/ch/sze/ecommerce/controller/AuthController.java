@@ -4,7 +4,7 @@ import ch.sze.ecommerce.entity.UserEntity;
 import ch.sze.ecommerce.entity.dto.AuthResponseDTO;
 import ch.sze.ecommerce.entity.dto.LoginDTO;
 import ch.sze.ecommerce.entity.dto.RegisterDTO;
-import ch.sze.ecommerce.service.UserEntityService;
+import ch.sze.ecommerce.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/auth")
 public class AuthController {
 
-    private final UserEntityService userService;
+    private final AuthService userService;
 
-    public AuthController(UserEntityService userService) {
+    public AuthController(AuthService userService) {
         this.userService = userService;
     }
 

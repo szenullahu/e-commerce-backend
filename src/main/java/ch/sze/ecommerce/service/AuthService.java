@@ -10,7 +10,7 @@ import ch.sze.ecommerce.entity.dto.CreateAdminDTO;
 import ch.sze.ecommerce.entity.dto.LoginDTO;
 import ch.sze.ecommerce.entity.dto.RegisterDTO;
 import ch.sze.ecommerce.repository.BasketRepo;
-import ch.sze.ecommerce.repository.UserEntityRepo;
+import ch.sze.ecommerce.repository.UserRepo;
 import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,9 +22,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 
 @Service
-public class UserEntityService {
+public class AuthService {
 
-    private final UserEntityRepo userEntityRepo;
+    private final UserRepo userRepo;
 
     private final PasswordEncoder encoder;
 
@@ -33,8 +33,8 @@ public class UserEntityService {
     private final JWTService jwtService;
     private final BasketRepo basketRepo;
 
-    public UserEntityService(UserEntityRepo userEntityRepo, PasswordEncoder encoder, AuthenticationManager manager, JWTService jwtService, BasketRepo basketRepo) {
-        this.userEntityRepo = userEntityRepo;
+    public AuthService(UserRepo userRepo, PasswordEncoder encoder, AuthenticationManager manager, JWTService jwtService, BasketRepo basketRepo) {
+        this.userRepo = userRepo;
         this.encoder = encoder;
         this.manager = manager;
         this.jwtService = jwtService;
@@ -42,10 +42,10 @@ public class UserEntityService {
     }
 
     public UserEntity register(RegisterDTO dto) {
-        if (userEntityRepo.existsByUsername(dto.getUsername())) {
+        if (userRepo.existsByUsername(dto.getUsername())) {
             throw new IllegalArgumentException("Username already exists");
         }
-        if (userEntityRepo.existsByEmail(dto.getEmail())) {
+        if (userRepo.existsByEmail(dto.getEmail())) {
             throw new IllegalArgumentException("E-Mail already exists");
         }
 
@@ -57,7 +57,7 @@ public class UserEntityService {
         user.setSurname(dto.getSurname());
         user.setProfilePicture(dto.getProfilePicture());
         user.setRole(Role.CUSTOMER);
-        UserEntity savedUser = userEntityRepo.save(user);
+        UserEntity savedUser = userRepo.save(user);
 
         BasketEntity basket = new BasketEntity();
         basket.setUser(savedUser);
@@ -84,7 +84,7 @@ public class UserEntityService {
 
     @PostConstruct
     public void createInitialAdmin() {
-        if (!userEntityRepo.existsByRole(Role.ADMIN)) {
+        if (!userRepo.existsByRole(Role.ADMIN)) {
             UserEntity admin = new UserEntity();
             admin.setUsername("admin");
             admin.setPassword(encoder.encode("admin123"));
@@ -94,15 +94,15 @@ public class UserEntityService {
             admin.setRole(Role.ADMIN);
             admin.setProfilePicture(ProfilePicture.AVATAR_1);
 
-            userEntityRepo.save(admin);
+            userRepo.save(admin);
         }
     }
 
     public void createAdmin(@Valid CreateAdminDTO dto) {
-        if (userEntityRepo.existsByUsername(dto.getUsername())) {
+        if (userRepo.existsByUsername(dto.getUsername())) {
             throw new IllegalArgumentException("Username already exists");
         }
-        if (userEntityRepo.existsByEmail(dto.getEmail())) {
+        if (userRepo.existsByEmail(dto.getEmail())) {
             throw new IllegalArgumentException("E-Mail already exists");
         }
 
@@ -115,6 +115,6 @@ public class UserEntityService {
         admin.setProfilePicture(dto.getProfilePicture());
         admin.setRole(Role.ADMIN);
 
-        userEntityRepo.save(admin);
+        userRepo.save(admin);
     }
 }
